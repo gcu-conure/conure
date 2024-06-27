@@ -2,8 +2,11 @@ import streamlit as st
 import base64
 
 def display_page7():
-    st.title("골절 예상 부위")
-    st.markdown("아픈 부위를 선택해주세요:")
+    col1, col2, col3 = st.columns([0.57, 1, 0.35])
+    with col2:
+        st.title("골절 예상 부위")
+        st.markdown("골절이 의심되는 부위를 선택해주세요!")
+    
     bone_names = [
        '안면부', '두개골', '척추', '흉곽', '쇄골',
        '어깨', '팔', '손목 및 손', '골반', '다리', '발목 및 발'
@@ -11,7 +14,6 @@ def display_page7():
     
     if 'selected_bone' not in st.session_state:
         st.session_state.selected_bone = ""
-    
 
     # 이미지 파일을 읽어 Base64 인코딩
     with open("./assets/body.jpg", "rb") as f:
@@ -21,12 +23,15 @@ def display_page7():
     # Base64 인코딩된 이미지를 HTML로 삽입
     st.markdown("""
         <style>
-        .born-container {
-            position:relative;
+        .bone-container {
+            display: flex;
+            justify-content: center;
+            position: relative;
             height: auto;
             max-width: 600px;
+            margin: auto;
         }
-        .born-container img {
+        .bone-container img {
             width: 100%;
             max-width: 600px;
             display: block;
@@ -52,9 +57,8 @@ def display_page7():
         </style>
     """, unsafe_allow_html=True)
 
-   
     st.markdown(f"""
-        <div class="born-container">
+        <div class="bone-container">
             <img src="data:image/jpeg;base64,{img_base64}">
             <button class="button-overlay" data-index="1" style="top: 8%; left: 24.8%; width: 8%; height: 10%;"></button>
             <button class="button-overlay" data-index="2" style="top: 5%; left: 67.5%; width: 8%; height: 13%;"></button>
@@ -85,59 +89,69 @@ def display_page7():
         </div>
     """, unsafe_allow_html=True)
 
-
     with st.form(key='bone_form'):
-        bone_number = st.text_input("선택한 부위 번호를 입력하세요:")
-        submit = st.form_submit_button("부위 선택")
+        col1, col2, col3 = st.columns([0.35, 1, 0.35])
+        with col2:
+            col1, col2, col3 = st.columns([0.4, 1, 0.4])
+            with col2:
+                bone_number = st.text_input("선택한 부위 번호를 입력하세요:")
+            col1, col2, col3 = st.columns([1.2, 1, 1])
+            with col2:
+                submit = st.form_submit_button("부위 선택")
 
     if submit:
-          if bone_number.isdigit() and 1 <= int(bone_number) <= 11:
+        if bone_number.isdigit() and 1 <= int(bone_number) <= 11:
             st.session_state.selected_bone = bone_names[int(bone_number) - 1]
-            st.markdown(f'선택된 부위: {int(bone_number)}번 {st.session_state.selected_bone}입니다. 맞으면 확인 버튼을 눌러주세요!')
-          else:
+            col1, col2, col3 = st.columns([0.3, 1, 0.3])
+            with col2:
+                col1, col2, col3 = st.columns([0.6, 1, 0.5])
+                with col2:
+                    st.markdown(f'{int(bone_number)}번은 {st.session_state.selected_bone}입니다.')
+                st.markdown('골절이 의심되는 부위가 맞으면 확인 버튼을 눌러주세요!')
+        else:
             st.error("유효한 부위 번호를 입력하세요. (1-11)")
 
     # 선택된 부위 이름 표시 및 확인 버튼
-    if st.session_state.selected_bone:
-        if st.button("확인"):
-            if int(bone_number)==1:
-              st.session_state.step = 7.2# 다음 페이지로 이동하기 위해 step 값을 설정
-              st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
-            if int(bone_number)==2:
-              st.session_state.step = 7.3# 다음 페이지로 이동하기 위해 step 값을 설정
-              st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
-            if int(bone_number)==3:
-              st.session_state.step = 7.4# 다음 페이지로 이동하기 위해 step 값을 설정
-              st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
-            if int(bone_number)==4:
-              st.session_state.step = 7.5# 다음 페이지로 이동하기 위해 step 값을 설정
-              st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
-            if int(bone_number)==5:
-              st.session_state.step = 7.6# 다음 페이지로 이동하기 위해 step 값을 설정
-              st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
-            if int(bone_number)==6:
-              st.session_state.step = 7.7# 다음 페이지로 이동하기 위해 step 값을 설정
-              st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
-            if int(bone_number)==7:
-              st.session_state.step = 7.8# 다음 페이지로 이동하기 위해 step 값을 설정
-              st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
-            if int(bone_number)==8:
-              st.session_state.step = 7.9# 다음 페이지로 이동하기 위해 step 값을 설정
-              st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
-            if int(bone_number)==9:
-              st.session_state.step = 7.10# 다음 페이지로 이동하기 위해 step 값을 설정
-              st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
-            if int(bone_number)==10:
-              st.session_state.step = 7.11# 다음 페이지로 이동하기 위해 step 값을 설정
-              st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
-            if int(bone_number)==11:
-              st.session_state.step = 7.12# 다음 페이지로 이동하기 위해 step 값을 설정
-              st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
-
-
-    else:
-        st.markdown('선택된 부위: 없음')
-
+    col1, col2, col3 = st.columns([1.68, 1, 1])
+    with col2:
+        if st.session_state.selected_bone:
+           if st.button("확인"):
+            if int(bone_number) == 1:
+                st.session_state.step = 7.2  # 다음 페이지로 이동하기 위해 step 값을 설정
+                st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
+            if int(bone_number) == 2:
+                st.session_state.step = 7.3  # 다음 페이지로 이동하기 위해 step 값을 설정
+                st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
+            if int(bone_number) == 3:
+                st.session_state.step = 7.4  # 다음 페이지로 이동하기 위해 step 값을 설정
+                st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
+            if int(bone_number) == 4:
+                st.session_state.step = 7.5  # 다음 페이지로 이동하기 위해 step 값을 설정
+                st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
+            if int(bone_number) == 5:
+                st.session_state.step = 7.6  # 다음 페이지로 이동하기 위해 step 값을 설정
+                st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
+            if int(bone_number) == 6:
+                st.session_state.step = 7.7  # 다음 페이지로 이동하기 위해 step 값을 설정
+                st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
+            if int(bone_number) == 7:
+                st.session_state.step = 7.8  # 다음 페이지로 이동하기 위해 step 값을 설정
+                st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
+            if int(bone_number) == 8:
+                st.session_state.step = 7.9  # 다음 페이지로 이동하기 위해 step 값을 설정
+                st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
+            if int(bone_number) == 9:
+                st.session_state.step = 7.10  # 다음 페이지로 이동하기 위해 step 값을 설정
+                st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
+            if int(bone_number) == 10:
+                st.session_state.step = 7.11  # 다음 페이지로 이동하기 위해 step 값을 설정
+                st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
+            if int(bone_number) == 11:
+                st.session_state.step = 7.12  # 다음 페이지로 이동하기 위해 step 값을 설정
+                st.experimental_rerun()  # 페이지를 리프레시하여 step 값을 반영
+    
+  
+        
 # 앱 실행 부분
 if __name__ == "__main__":
     display_page7()
